@@ -192,5 +192,79 @@ cp -r /home/cvop/calbfg-patch/* webapps/calbfg
 rm -rf webapps/calbfg/staging/
 mv temp/staging webapps/calbfg/
 
+===========================================================================
+GeoServer deployment
+----------------------------
+Please refer to this page for deploying GeoServer as a web archive:
+https://docs.geoserver.org/stable/en/user/installation/war.html
+
+For example, with Tomcat running on port 8080 on localhost, the URL is http://localhost:8080/geoserver.
+
+* Please note GeoServer requires a Java 8 environment and that Tomcat (7.0.65 or later) is recommended.
+
+GeoServer security
+----------------------------
+The default GeoServer administration username/password is: admin/geoserver.
+It is recommended to change these administration credentials, and also add new users and roles as required.
+
+Please refer to this page for more information on the security subsystem in GeoServer:
+https://docs.geoserver.org/stable/en/user/security/
+
+GeoServer data directory
+----------------------------
+For web archive deployments, the built-in data directory is located in webapps under geoserver/data. But it is a good
+idea to separate the data from the application. Using an external data directory allows for much easier upgrades, etc.
+
+The data directory can be set in WEB-INF/web.xml, using a servlet context parameter named GEOSERVER_DATA_DIR.
+
+Please refer to this page for more information on setting the data directory location:
+https://docs.geoserver.org/stable/en/user/datadirectory/setting.html
+
+GeoServer data management
+----------------------------
+Data in GeoServer is organised into workspaces, stores, and layers:
+
+A workspace is a container which organises items.
+Workspaces: https://docs.geoserver.org/stable/en/user/data/webadmin/workspaces.html
+
+A store, which is assigned a workspace, connects to a data source that contains raster or vector data. A data source
+can be a file or group of files, a table in a database, a single raster file, or a directory.
+Stores: https://docs.geoserver.org/stable/en/user/data/webadmin/stores.html
+
+A layer is configured to represent and publish data from data stores. Layers can be published in GeoServer using
+standards such as WMS, WFS, WCS and KML.
+Layers: https://docs.geoserver.org/stable/en/user/data/webadmin/layers.html
+Layer Groups: https://docs.geoserver.org/stable/en/user/data/webadmin/layergroups.html
+
+GeoServer - Calvalus support
+----------------------------
+Calvalus supports the publishing of GeoTIFF images to GeoServer using the Quicklooks feature.
+
+The GeoServer data store name used by the upload service is the Calvalus product name. Any existing data store with
+this product name within the workspace is replaced. Likewise, the GeoServer layer name used by the upload service is
+also the Calvalus product name. Any existing layer with this name within the workspace is also replaced.
+The upload service uses the default GeoServer raster style.
+
+The Calvalus administrator needs to configure these GeoServer Quicklook settings in calvalus.properties to enable
+GeoServer - Calvalus support:
+
+# Quicklook upload handler. Note: only geoserver supported. Mandatory.
+calvalus.ql.upload.handler = geoserver
+
+# Quicklook upload URL. Mandatory. Example:
+calvalus.ql.upload.URL = http://localhost:8080/geoserver/rest/
+
+# Username and password for the GeoServer upload URL service. Optional. Example:
+calvalus.ql.upload.username = admin
+calvalus.ql.upload.password = geoserver
+
+# GeoServer workspace to use. Mandatory. Example:
+calvalus.ql.upload.workspace = calmar
+
+Finally, ensure that the calvalus.portal.ql.wms portal access control and visual configuration option is set in
+calvalus.properties. This setting is required to enable the quicklook WMS checkbox. Example:
+
+# Quicklook WMS checkbox - access control and visual configuration
+calvalus.portal.ql.wms = calvalus bc bg coastcolour calwps
 
 

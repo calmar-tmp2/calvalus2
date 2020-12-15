@@ -220,5 +220,13 @@
             <groupId>org.renjin</groupId>
             <artifactId>renjin-core</artifactId>
         </dependency>
+
+        <!-- GDAL -->
+        <dependency>
+            <groupId>org.gdal</groupId>
+            <artifactId>gdal</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
     </dependencies>
 </project>
